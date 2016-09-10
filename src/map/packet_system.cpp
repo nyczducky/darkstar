@@ -3693,7 +3693,7 @@ void SmallPacket0x0B5(map_session_data_t* session, CCharEntity* PChar, CBasicPac
     {
         //this makes sure a command isn't sent to chat
     }
-    else if (RBUFB(data, (0x06)) == '#' && PChar->nameflags.flags & FLAG_GM)
+    else if (RBUFB(data, (0x06)) == '#' && PChar->m_GMlevel > 0)
     {
         message::send(MSG_CHAT_SERVMES, 0, 0, new CChatMessagePacket(PChar, MESSAGE_SYSTEM_1, data[7]));
     }
@@ -3878,7 +3878,7 @@ void SmallPacket0x0B6(map_session_data_t* session, CCharEntity* PChar, CBasicPac
         std::string qStr = ("INSERT into audit_chat (speaker,type,recipient,message,datetime) VALUES('");
         qStr += PChar->GetName();
         qStr += "','TELL','";
-        qStr += RecipientName;
+        qStr += RecipientName.c_str();
         qStr += "','";
         qStr += escape(data[20]);
         qStr += "',current_timestamp());";
