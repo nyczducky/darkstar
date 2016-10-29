@@ -9,6 +9,7 @@ package.loaded["scripts/zones/Aht_Urhgan_Whitegate/TextIDs"] = nil;
 -----------------------------------
 
 require("scripts/globals/settings");
+require("scripts/globals/titles");
 require("scripts/globals/quests");
 require("scripts/zones/Aht_Urhgan_Whitegate/TextIDs");
 
@@ -55,6 +56,11 @@ function onTrigger(player,npc)
         player:startEvent(0x0044); -- reminder to get the stone to Aydeewa
     elseif (AnEmptyVessel == QUEST_COMPLETED and player:hasKeyItem(771) == true and player:getVar("BluAFBeginnings_Optional") == 1) then
         player:startEvent(0x0045); -- optional CS for AF
+    elseif (player:getQuestStatus(AHT_URHGAN,BEGINNINGS) == QUEST_AVAILABLE and player:getMainJob() == JOBS.BLU and player:getMainLvl() >= 40 and divinationReady == true and player:needToZone() == false) then
+        player:startEvent(0x02C1);
+    elseif ( player:getQuestStatus(AHT_URHGAN,BEGINNINGS) == QUEST_ACCEPTED and player:hasKeyItem(BRAND_OF_THE_SPRINGSERPENT) and player:hasKeyItem(BRAND_OF_THE_GALESERPENT) 
+            and player:hasKeyItem(BRAND_OF_THE_FLAMESERPENT) and player:hasKeyItem(BRAND_OF_THE_SKYSERPENT) and player:hasKeyItem(BRAND_OF_THE_STONESERPENT) )then
+        player:startEvent(707);
     else
         player:startEvent(0x003D);
     end;
@@ -140,6 +146,9 @@ function onEventFinish(player,csid,option)
         player:setVar("AnEmptyVesselProgress",4);
     elseif (csid == 0x0045 and option == 1) then -- Optional (?) cutscene for AF quest.
         player:setVar("BluAFBeginnings_Optional",0);
+        player:needToZone(true);
+        player:setVar("LastDivinationDay",VanadielDayOfTheYear());
+        player:setVar("LastDivinationYear",VanadielYear());
     elseif (csid ==0x003c and option ~= 50 and option ~= 0) then
         player:setVar("LastDivinationDay",VanadielDayOfTheYear());
         player:setVar("LastDivinationYear",VanadielYear());
@@ -147,5 +156,17 @@ function onEventFinish(player,csid,option)
         player:setVar("SuccessfullyAnswered",0);
         player:delGil(1000);
         player:messageSpecial(8633); -- "You pay 1000 gil for the divination."
+    elseif (csid == 0x02C1) then
+        player:addQuest(AHT_URHGAN,BEGINNINGS);
+    elseif (csid == 707) then
+        if (player:getFreeSlotsCount(0) >= 1) then
+            player:addItem(17717);
+            player:messageSpecial(ITEM_OBTAINED, 17717); -- Immortal Scimitar
+            player:completeQuest(AHT_URHGAN,BEGINNINGS);
+            player:addTitle(BRANDED_BY_THE_FIVE_SERPENTS);
+            player:setVar("Omens_wait", os.date("%m"));
+        else
+           player:messageSpecial(ITEM_CANNOT_BE_OBTAINED, 17717); -- Immortal Scimitar
+        end
     end;
 end;

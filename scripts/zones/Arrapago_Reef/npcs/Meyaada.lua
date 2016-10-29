@@ -30,6 +30,12 @@ function onTrigger(player,npc)
         elseif (player:getVar("AhtUrganStatus") == 1) then
             player:startEvent(6);
         end
+    elseif ( player:getQuestStatus(AHT_URHGAN,BEGINNINGS) == QUEST_ACCEPTED ) then
+        if ( player:hasKeyItem(BRAND_OF_THE_SPRINGSERPENT) == false ) then
+            player:startEvent(10);
+        else 
+            player:startEvent(11);
+        end
     elseif (player:getCurrentMission(TOAU) >= PRESIDENT_SALAHEEM) then
         if (player:hasKeyItem(ILRUSI_ASSAULT_ORDERS) and player:hasKeyItem(ASSAULT_ARMBAND) == false) then
             player:startEvent(223,50,IPpoint);
@@ -65,5 +71,8 @@ function onEventFinish(player,csid,option)
         player:delCurrency("imperial_standing", 50);
         player:addKeyItem(ASSAULT_ARMBAND);
         player:messageSpecial(KEYITEM_OBTAINED,ASSAULT_ARMBAND);
+    elseif (csid == 10) then
+        player:addKeyItem(BRAND_OF_THE_SPRINGSERPENT);
+        player:messageSpecial(KEYITEM_OBTAINED,BRAND_OF_THE_SPRINGSERPENT);        
     end
 end;
