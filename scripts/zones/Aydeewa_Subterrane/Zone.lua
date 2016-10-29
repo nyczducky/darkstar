@@ -73,6 +73,8 @@ function onEventFinish(player,csid,option)
     -- printf("RESULT: %u",option);
     if (csid == 0x0003 and option == 13) then -- Accept and unlock
         player:setVar("EmptyVesselStone",0);
+        player:setVar("AnEmptyVesselProgress",0);
+        player:setVar("BluAFBeginnings_Optional",1);
         player:addKeyItem(MARK_OF_ZAHAK);
         player:unlockJob(16);
         player:addTitle(BEARER_OF_THE_MARK_OF_ZAHAK);

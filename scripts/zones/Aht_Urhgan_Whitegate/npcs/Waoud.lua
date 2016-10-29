@@ -53,7 +53,7 @@ function onTrigger(player,npc)
         player:startEvent(0x0042); -- reminder of the shortened version, you can trade the stone.
     elseif (AnEmptyVesselProgress == 4) then 
         player:startEvent(0x0044); -- reminder to get the stone to Aydeewa
-    elseif (AnEmptyVessel == QUEST_COMPLETED and player:hasKeyItem(771) == true and player:getVar("BluAFBeginnings_Optional") == 0) then
+    elseif (AnEmptyVessel == QUEST_COMPLETED and player:hasKeyItem(771) == true and player:getVar("BluAFBeginnings_Optional") == 1) then
         player:startEvent(0x0045); -- optional CS for AF
     else
         player:startEvent(0x003D);
@@ -139,7 +139,7 @@ function onEventFinish(player,csid,option)
     elseif (csid == 0x0043) then -- Turn in stone, go to Aydeewa
         player:setVar("AnEmptyVesselProgress",4);
     elseif (csid == 0x0045 and option == 1) then -- Optional (?) cutscene for AF quest.
-        player:setVar("BluAFBeginnings_Waoud",1);
+        player:setVar("BluAFBeginnings_Optional",0);
     elseif (csid ==0x003c and option ~= 50 and option ~= 0) then
         player:setVar("LastDivinationDay",VanadielDayOfTheYear());
         player:setVar("LastDivinationYear",VanadielYear());
